@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 export default function FetchQueryInput(props) {
-  const {placeholder} = props;
   const [query, setQuery] = useState("");
 
   function getData() {
@@ -11,7 +10,7 @@ export default function FetchQueryInput(props) {
   return (
     <div className="flex flex-col items-end gap-3">
       <label class="input input-bordered flex items-center gap-2">
-        <input type="text" class="grow" placeholder={placeholder} />
+        <input type="text" class="grow" placeholder="Escribe acá" onChange={(e) => setQuery(e.target.value)} />
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 16 16"
@@ -23,7 +22,14 @@ export default function FetchQueryInput(props) {
             clip-rule="evenodd" />
         </svg>
       </label>
-      <button className="btn btn-primary" onChange={(e) => {setQuery(e.target.value)}} onClick={getData}>
+      <select class="select select-secondary select-bordered w-full max-w-xs">
+        <option disabled selected>Orden</option>
+        <option>Ascendente</option>
+        <option>Descendente</option>
+      </select>
+      <button 
+      className="btn btn-primary" 
+      onClick={getData}>
         Consultar
       </button>
     </div>
