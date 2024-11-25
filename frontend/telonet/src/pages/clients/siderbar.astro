@@ -1,0 +1,10 @@
+---
+import Sidebar from "../components/Sidebar.jsx";
+---
+
+<div class="layout">
+    <Sidebar client:only="react" />
+    <main class="content">
+        <slot />
+    </main>
+</div>
