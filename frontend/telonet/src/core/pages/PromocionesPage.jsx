@@ -1,28 +1,43 @@
+// Toma en cuenta este componente para hacerlo y adaptarlo a los demás.
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../../styles/ContentStyles.css';
 
 export default function PromocionesPage() {
     const [promociones, setPromociones] = useState([]);
+    const [loading, setLoading] = useState(false); // Para mostrar el estado de carga
+    const [error, setError] = useState(null); // Manejo de errores
 
     useEffect(() => {
         fetchPromociones();
     }, []);
 
-    const fetchPromociones = () => {
-        axios.get('http://localhost:3001/api/promociones') // Asegúrate de que el backend tiene esta ruta configurada
-            .then(response => {
-                setPromociones(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching promociones:', error);
-            });
+    const fetchPromociones = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const procedureData = {
+                procedure_name: 'get_promociones', // Nombre del procedimiento
+                params: [] // Parámetros (vacío si no se necesitan)
+            };
+
+            const response = await axios.post('http://localhost:8000/api/procedures', procedureData);
+            setPromociones(response.data.results);
+        } catch (err) {
+            console.error('Error fetching promociones:', err);
+            setError('Error al obtener las promociones.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
         <div className="main-content">
             <h1>Promociones Disponibles</h1>
-            {promociones.length > 0 ? (
+            {loading && <p>Cargando promociones...</p>}
+            {error && <p className="error-message">{error}</p>}
+            {!loading && !error && promociones.length > 0 ? (
                 <table className="promociones-table">
                     <thead>
                         <tr>
@@ -50,7 +65,7 @@ export default function PromocionesPage() {
                     </tbody>
                 </table>
             ) : (
-                <p>No se encontraron promociones disponibles.</p>
+                !loading && <p>No se encontraron promociones disponibles.</p>
             )}
         </div>
     );

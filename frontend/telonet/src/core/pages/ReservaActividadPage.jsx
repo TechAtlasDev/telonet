@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import '../styles/ContentStyles.css';
+import '../../styles/ContentStyles.css';
 
 export default function ReservaActividadPage() {
     const [reservasActividad, setReservasActividad] = useState([]);
